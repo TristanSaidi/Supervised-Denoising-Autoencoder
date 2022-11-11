@@ -8,6 +8,7 @@ from PIL import Image
 from six.moves.urllib.request import urlretrieve
 
 
+## Largely pulled from starter code for HW 2 of Richard Zemel's Neural Networks and Deep Learning class at Columbia
 
 def get_file(fname, origin, untar=False, extract=False, archive_format="auto", cache_dir="data"):
     datadir = os.path.join(cache_dir)
@@ -51,7 +52,7 @@ def get_file(fname, origin, untar=False, extract=False, archive_format="auto", c
 
 
 
-def load_batch(fpath, label_key="labels"):
+def load_batch(fpath, label_key="fine_labels"):
     """Internal utility for parsing CIFAR data.
     # Arguments
         fpath: path the file to parse.
@@ -78,27 +79,19 @@ def load_batch(fpath, label_key="labels"):
     return data, labels
 
 
-def load_cifar10(transpose=False):
+def load_cifar100(transpose=False):
     """Loads CIFAR10 dataset.
     # Returns
         Tuple of Numpy arrays: `(x_train, y_train), (x_test, y_test)`.
     """
-    dirname = "cifar-10-batches-py"
-    origin = "http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz"
+    dirname = "cifar-100-python"
+    origin = "http://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz"
     path = get_file(dirname, origin=origin, untar=True)
 
-    num_train_samples = 50000
+    fpath = os.path.join(path, "train")
+    x_train, y_train = load_batch(fpath)
 
-    x_train = np.zeros((num_train_samples, 3, 32, 32), dtype="uint8")
-    y_train = np.zeros((num_train_samples,), dtype="uint8")
-
-    for i in range(1, 6):
-        fpath = os.path.join(path, "data_batch_" + str(i))
-        data, labels = load_batch(fpath)
-        x_train[(i - 1) * 10000 : i * 10000, :, :, :] = data
-        y_train[(i - 1) * 10000 : i * 10000] = labels
-
-    fpath = os.path.join(path, "test_batch")
+    fpath = os.path.join(path, "test")
     x_test, y_test = load_batch(fpath)
 
     y_train = np.reshape(y_train, (len(y_train), 1))
@@ -108,6 +101,3 @@ def load_cifar10(transpose=False):
         x_train = x_train.transpose(0, 2, 3, 1)
         x_test = x_test.transpose(0, 2, 3, 1)
     return (x_train, y_train), (x_test, y_test)
-
-print(get_file("cifar-10-batches-py", "http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz", untar=True))
-
