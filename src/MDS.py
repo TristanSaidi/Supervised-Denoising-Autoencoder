@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.manifold import MDS
 import data_loader
 import matplotlib.pyplot as plt 
+import torch as th
 
 class Pre_Cluster_MultiDimensionalScaling:
     def __init__(self, num_classes):
@@ -20,10 +21,9 @@ class Pre_Cluster_MultiDimensionalScaling:
     def generate_labels(self, sample_data, sample_labels):
         data = sample_data.reshape((sample_data.shape[0],np.prod(sample_data.shape[1:])))
         pre_MDS_centers = self.generate_data_centers(data, sample_labels)
-        embedding = MDS(n_components = 100)
-        centers_transformed = embedding.fit_transform(pre_MDS_centers)
-
-        return 0
+        embedding = MDS(n_components = self.num_classes)
+        centers_transformed = embedding.fit_transform(pre_MDS_centers)        
+        return centers_transformed
 
     def fetch_labels(self):
         return self.labels
@@ -31,7 +31,7 @@ class Pre_Cluster_MultiDimensionalScaling:
 
 
 if __name__ == "__main__":
-    PCMS = Pre_Cluster_MultiDimensionalScaling(num_classes = 100)
+    PCMS = Pre_Cluster_MultiDimensionalScaling(num_classes = 10)
     train_tuple, test_tuple = data_loader.load_cifar100()
     train_data, train_labels = train_tuple
     PCMS.generate_labels(train_data, train_labels)
