@@ -21,5 +21,4 @@ test_transform = tt.Compose([
 
 if __name__ == "__main__":
     train_data = CIFAR100(download=True,root="./data",transform=train_transform)
-    print(train_data[0])
     test_data = CIFAR100(root="./data",train=False,transform=test_transform)
