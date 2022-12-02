@@ -30,7 +30,6 @@ class ConvNet(nn.Module):
         self.conv4 = nn.ConvTranspose2d(in_channels=64, out_channels=3, kernel_size=(3,3), stride=(1,1))
 
         self.softmax = nn.Linear(in_features=32, out_features=10)
-t
     def forward(self,x):
         xe = F.relu(self.conv1(x))
         xe = F.relu(self.conv2(xe))
@@ -54,7 +53,7 @@ t
         return 'lenet'
 
 def train(weight):
-    path = './models/pytorch/'#curr_DIR = os.path.dirname(os.path.realpath(__file__))+'/models/'#'/home/morteza/Documents/Dr. Wang/Semi_Supervised_Auto_Encoder-master/models/pytorch/'
+    path = './models/pytorch/' #curr_DIR = os.path.dirname(os.path.realpath(__file__))+'/models/'#'/home/morteza/Documents/Dr. Wang/Semi_Supervised_Auto_Encoder-master/models/pytorch/'
     filename = '20epochs-wr'+str(weight)+'-arch5'
     wp=1
     wr=weight
@@ -80,7 +79,7 @@ def train(weight):
         running_loss=0.0
         model_acc = 0.0
         total_images=0
-        for i,data in enumerate(trainloader,0):
+        for i, data in enumerate(trainloader,0):
             inputs, labels = Variable(data[0]).cuda(), Variable(data[1]).cuda()
             optimizer.zero_grad()
 
